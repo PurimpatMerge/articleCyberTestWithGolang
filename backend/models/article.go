@@ -20,6 +20,10 @@ type Article struct {
 	UpdatedAt   time.Time `json:"updatedAt" gorm:"column:updatedAt"`
 	PublishedAt time.Time `json:"publishedAt" gorm:"column:publishedAt"`
 }
+type ExtendedArticle struct {
+	Article
+	ID uint `gorm:"primaryKey" json:"id"`
+}
 
 func NewArticle(title, content, author string) *Article {
 	return &Article{

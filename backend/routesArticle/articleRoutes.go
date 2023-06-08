@@ -13,5 +13,6 @@ func SetupArticleRoutes(router *gin.RouterGroup) {
 		articleRoutes.GET("/view/:id", controllersArticle.GetArticleById)
 		articleRoutes.POST("/addView/:id", controllersArticle.IncrementArticleView)
 		articleRoutes.POST("/createArticle/:id", controllersArticle.CreateArticle)
+		articleRoutes.PUT("/updateArticle/:id", controllersArticle.UpdateArticle)
 	}
 }
