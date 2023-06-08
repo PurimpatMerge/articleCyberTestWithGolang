@@ -311,3 +311,59 @@ func GetOnlyArticleByID(c *gin.Context) {
 
 	c.JSON(200, gin.H{"results": results})
 }
+
+// delete (relation)
+func DeleteArticle(c *gin.Context) {
+	articleID := c.Param("id") // Extract the articleID from the URL params
+
+	deleteUserArticlesQuery := `
+		DELETE FROM user_articles
+		WHERE articleId = ?
+	`
+
+	deleteArticleQuery := `
+		DELETE FROM articles
+		WHERE id = ?
+	`
+
+	tx := initializers.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	userArticlesResult := tx.Exec(deleteUserArticlesQuery, articleID)
+	if userArticlesResult.Error != nil {
+		tx.Rollback()
+		log.Printf("Error deleting user_articles: %s", userArticlesResult.Error.Error())
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	affectedUserArticlesRows := userArticlesResult.RowsAffected
+	if affectedUserArticlesRows == 0 {
+		tx.Rollback()
+		c.JSON(404, gin.H{"message": "Article not found"})
+		return
+	}
+
+	articleResult := tx.Exec(deleteArticleQuery, articleID)
+	if articleResult.Error != nil {
+		tx.Rollback()
+		log.Printf("Error deleting article: %s", articleResult.Error.Error())
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	affectedArticleRows := articleResult.RowsAffected
+	if affectedArticleRows == 0 {
+		tx.Rollback()
+		c.JSON(404, gin.H{"message": "Article not found"})
+		return
+	}
+
+	tx.Commit()
+
+	c.JSON(204, gin.H{"message": "Article deleted successfully"})
+}

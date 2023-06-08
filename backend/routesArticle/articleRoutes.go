@@ -16,5 +16,6 @@ func SetupArticleRoutes(router *gin.RouterGroup) {
 		articleRoutes.PUT("/updateArticle/:id", controllersArticle.UpdateArticle)
 		articleRoutes.GET("/table", controllersArticle.GetAllArticle)
 		articleRoutes.GET("/getOnlyArticleById/:id", controllersArticle.GetOnlyArticleByID)
+		articleRoutes.DELETE("/deleteArticle/:id", controllersArticle.DeleteArticle)
 	}
 }
