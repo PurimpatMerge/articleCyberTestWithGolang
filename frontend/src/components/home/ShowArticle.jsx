@@ -112,42 +112,42 @@ const ShowArticle = () => {
 
         {/* Article content */}
         <div className="mt-10 grid gap-5 grid-cols-none sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {(data?.relationData ?? []).map((item) => (
-            <div key={item.article?.id}>
+          {(data?.results ?? []).map((item) => (
+            <div key={item?.id}>
               <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                   sx={{ height: 140 }}
-                  image={item.article?.image || img}
+                  image={item?.image || img}
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    {item.article?.title}
+                    {item?.title}
                   </Typography>
                   <Typography gutterBottom component="div">
-                    author: {item.article?.author}
+                    author: {item?.author}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {item.article?.content}
+                    {item?.content}
                   </Typography>
                 </CardContent>
                 <CardContent className="flex">
-                  <Avatar alt="avatar" src={item.user?.upicture || img} />
+                  <Avatar alt="avatar" src={item?.upicture || img} />
                   <div className="my-auto">
                     <Typography variant="body2" color="text.secondary">
-                      {item.user?.fname} {item.user?.lname}
+                      {item?.fname} {item?.lname}
                     </Typography>
                   </div>
                 </CardContent>
                 <CardContent className="flex justify-between">
                 <Typography variant="body2" color="text.secondary">
-                     Like {item.article?.likesCount}
+                     Like {item?.likesCount}
                   </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    view {item.article?.viewsCount}
+                    view {item?.viewsCount}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {item.article?.updatedAt
-                      ? new Date(item.article.updatedAt).toLocaleDateString(
+                    {item?.updatedAt
+                      ? new Date(item.updatedAt).toLocaleDateString(
                           "en-US",
                           {
                             year: "numeric",
@@ -159,8 +159,8 @@ const ShowArticle = () => {
                   </Typography>
                 </CardContent>
                 <CardActions className="flex justify-center">
-                  <Link to={`/ArticleContent/${item.article?.id}`}>
-                    <Button size="small" onClick={() => viewAdd(item.article?.id)} >Read More</Button>
+                  <Link to={`/ArticleContent/${item?.id}`}>
+                    <Button size="small" onClick={() => viewAdd(item?.id)} >Read More</Button>
                   </Link>
                 </CardActions>
               </Card>
