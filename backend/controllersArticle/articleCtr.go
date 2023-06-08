@@ -1,9 +1,13 @@
 package controllersArticle
 
 import (
+	"log"
 	"strconv"
+	"strings"
+	"time"
 
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/initializers"
+	"CyberTestWithGolang/articleCyberTestWithGolang/backend/models"
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/util"
 
 	"github.com/gin-gonic/gin"
@@ -126,4 +130,54 @@ func IncrementArticleView(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{"message": "Article view count incremented successfully."})
+}
+
+// create with out class no oop need fix
+func CreateArticle(c *gin.Context) {
+	userId := c.Param("id") // Extract the userId from the URL params
+
+	var body struct {
+		Title    string   `json:"title"`
+		Content  string   `json:"content"`
+		Author   string   `json:"author"`
+		Category string   `json:"category"`
+		Tags     []string `json:"tags"`
+		Image    string   `json:"image"`
+	}
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		// Handle the error if the JSON binding fails
+		c.JSON(400, gin.H{"error": "Invalid request payload"})
+		return
+	}
+
+	now := time.Now() // Current timestamp
+
+	article := models.Article{
+		Title:       body.Title,
+		Content:     body.Content,
+		Author:      body.Author,
+		Category:    body.Category,
+		Tags:        strings.Join(body.Tags, ", "),
+		Image:       body.Image,
+		ViewsCount:  "0",
+		LikesCount:  "0",
+		CreatedAt:   now,
+		UpdatedAt:   now,
+		PublishedAt: now,
+	}
+
+	err := initializers.DB.Create(&article).Error
+	if err != nil {
+		// Handle the database error
+		log.Printf("Error creating article: %s", err.Error())
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	// Log the userId and article data
+	log.Printf("userId: %s, article: %+v", userId, article)
+
+	// Return the response
+	c.JSON(201, gin.H{"message": article})
 }
