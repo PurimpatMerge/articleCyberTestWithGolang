@@ -21,14 +21,5 @@ func main() {
 
 	// Set up article routes
 	routesArticle.SetupArticleRoutes(router.Group("/v1/api/article"))
-
-	//basic starter before sperate the env
-	// router.GET("/v1/api/article/search", func(c *gin.Context) {
-	// 	fmt.Println("working on main")
-	// 	c.JSON(200, gin.H{
-	// 		"message": "pong",
-	// 	})
-	// })
-
 	router.Run() // listen and serve on 0.0.0.0:8080
 }

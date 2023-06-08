@@ -11,5 +11,6 @@ func SetupArticleRoutes(router *gin.RouterGroup) {
 	{
 		articleRoutes.GET("/search", controllersArticle.GetSearchRelationArticleUser)
 		articleRoutes.GET("/view/:id", controllersArticle.GetArticleById)
+		articleRoutes.POST("/addView/:id", controllersArticle.IncrementArticleView)
 	}
 }
