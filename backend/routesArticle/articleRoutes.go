@@ -15,5 +15,6 @@ func SetupArticleRoutes(router *gin.RouterGroup) {
 		articleRoutes.POST("/createArticle/:id", controllersArticle.CreateArticle)
 		articleRoutes.PUT("/updateArticle/:id", controllersArticle.UpdateArticle)
 		articleRoutes.GET("/table", controllersArticle.GetAllArticle)
+		articleRoutes.GET("/getOnlyArticleById/:id", controllersArticle.GetOnlyArticleByID)
 	}
 }

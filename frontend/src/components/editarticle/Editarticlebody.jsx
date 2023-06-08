@@ -61,7 +61,7 @@ const Editarticlebody = () => {
         ...info,
         image: list,
       };
-      
+      console.log(allInfo);
       await axios.put(`http://localhost:8000/v1/api/article/updateArticle/${data.results[0].id}`,
       allInfo
       );

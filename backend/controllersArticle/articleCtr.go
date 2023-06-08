@@ -206,7 +206,7 @@ func UpdateArticle(c *gin.Context) {
 		Author      string    `json:"author"`
 		Category    string    `json:"category"`
 		Tags        []string  `json:"tags"`
-		Image       string    `json:"image"`
+		Image       []string  `json:"image"`
 		ViewsCount  string    `json:"viewsCount"`
 		LikesCount  string    `json:"likesCount"`
 		PublishedAt time.Time `json:"publishedAt"`
@@ -235,7 +235,7 @@ func UpdateArticle(c *gin.Context) {
 	if len(body.Tags) > 0 {
 		updateObj["tags"] = strings.Join(body.Tags, ", ")
 	}
-	if body.Image != "" {
+	if len(body.Image) > 0 {
 		updateObj["image"] = body.Image
 	}
 	if body.ViewsCount != "" {
@@ -286,4 +286,28 @@ func GetAllArticle(c *gin.Context) {
 		return
 	}
 	c.JSON(200, gin.H{"results": articles})
+}
+
+// form update
+func GetOnlyArticleByID(c *gin.Context) {
+	articleID := c.Param("id")
+
+	// Execute the raw SQL query
+	query := "SELECT * FROM articles WHERE articles.id = " + articleID
+
+	var results []map[string]interface{}
+	if err := initializers.DB.Raw(query).Scan(&results).Error; err != nil {
+		// Handle the database query error with a 500 status code
+		log.Printf("Error executing query: %s", err.Error())
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	if len(results) == 0 {
+		// Article not found
+		c.JSON(404, gin.H{"message": "Article not found"})
+		return
+	}
+
+	c.JSON(200, gin.H{"results": results})
 }

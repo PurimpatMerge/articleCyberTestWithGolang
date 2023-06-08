@@ -3,6 +3,7 @@ package main
 import (
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/initializers"
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/routesArticle"
+	"os"
 
 	// เป็นการimport ที่เรียกใช้ในการ print in console มา
 
@@ -29,6 +30,6 @@ func main() {
 	// 		"message": "pong",
 	// 	})
 	// })
-
-	router.Run() // listen and serve on 0.0.0.0:8080
+	PORT := os.Getenv("PORT")
+	router.Run(":" + PORT) // listen and serve on 0.0.0.0:8080
 }
