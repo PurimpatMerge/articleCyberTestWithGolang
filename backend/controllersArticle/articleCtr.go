@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// get all the Home page data (relation)
 func GetSearchRelationArticleUser(c *gin.Context) {
 	search := c.Query("search")
 	pageStr := c.Query("page")
@@ -72,6 +73,7 @@ func GetSearchRelationArticleUser(c *gin.Context) {
 	})
 }
 
+// get the specfic read more (relation)
 func GetArticleById(c *gin.Context) {
 	articleId := c.Param("id")
 
@@ -102,4 +104,26 @@ func GetArticleById(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{"relationData": relationData})
+}
+
+// view counter
+func IncrementArticleView(c *gin.Context) {
+	articleId := c.Param("id")
+
+	updateViewsQuery := `
+		UPDATE articles SET viewsCount = IFNULL(viewsCount, 0) + 1 WHERE id = ?`
+	if err := initializers.DB.Exec(updateViewsQuery, articleId).Error; err != nil {
+		// Handle the database query error with a 500 status code
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	affectedRows := initializers.DB.RowsAffected
+	if affectedRows == 0 {
+		// Article not found
+		c.JSON(404, gin.H{"error": "Article not found"})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "Article view count incremented successfully."})
 }
