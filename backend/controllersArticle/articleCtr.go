@@ -70,3 +70,67 @@ func GetSearchRelationArticleUser(c *gin.Context) {
 		"totalCount": totalCount,
 	})
 }
+
+func GetArticleById(c *gin.Context) {
+	articleId := c.Param("id")
+
+	query := `SELECT *
+	FROM users
+	JOIN user_articles ON users.userid = user_articles.userId
+	JOIN articles ON user_articles.articleId = articles.id
+	WHERE articles.id = ` + articleId
+
+	var results []map[string]interface{}
+	if err := initializers.DB.Raw(query).Scan(&results).Error; err != nil {
+		// Handle the database query error with a 500 status code
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	if len(results) == 0 {
+		// Article not found
+		c.JSON(404, gin.H{"message": "Article not found"})
+		return
+	}
+
+	relationData := make([]*map[string]interface{}, len(results))
+	for i, result := range results {
+		user := map[string]interface{}{
+			"fname":    result["fname"],
+			"lname":    result["lname"],
+			"username": result["username"],
+			"uemail":   result["uemail"],
+			"userId":   result["userId"],
+			"upicture": result["upicture"],
+			"updateAt": result["updateAt"],
+		}
+
+		userArticle := map[string]interface{}{
+			"id":        result["userArticleId"],
+			"userId":    result["userId"],
+			"articleId": result["articleId"],
+		}
+
+		article := map[string]interface{}{
+			"id":          result["articleId"],
+			"title":       result["title"],
+			"content":     result["content"],
+			"author":      result["author"],
+			"publishedAt": result["publishedAt"],
+			"updatedAt":   result["updatedAt"],
+			"category":    result["category"],
+			"tags":        result["tags"],
+			"image":       result["image"],
+			"viewsCount":  result["viewsCount"],
+			"likesCount":  result["likesCount"],
+		}
+
+		relationData[i] = &map[string]interface{}{
+			"user":        user,
+			"userArticle": userArticle,
+			"article":     article,
+		}
+	}
+
+	c.JSON(200, gin.H{"relationData": relationData})
+}
