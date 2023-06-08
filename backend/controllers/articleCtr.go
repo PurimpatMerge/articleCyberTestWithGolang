@@ -1,4 +1,4 @@
-package controllersArticle
+package controllers
 
 import (
 	"log"

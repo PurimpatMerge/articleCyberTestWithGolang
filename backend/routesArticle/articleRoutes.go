@@ -1,7 +1,7 @@
 package routesArticle
 
 import (
-	"CyberTestWithGolang/articleCyberTestWithGolang/backend/controllersArticle"
+	"CyberTestWithGolang/articleCyberTestWithGolang/backend/controllers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,13 +9,13 @@ import (
 func SetupArticleRoutes(router *gin.RouterGroup) {
 	articleRoutes := router
 	{
-		articleRoutes.GET("/search", controllersArticle.GetSearchRelationArticleUser)
-		articleRoutes.GET("/view/:id", controllersArticle.GetArticleById)
-		articleRoutes.POST("/addView/:id", controllersArticle.IncrementArticleView)
-		articleRoutes.POST("/createArticle/:id", controllersArticle.CreateArticle)
-		articleRoutes.PUT("/updateArticle/:id", controllersArticle.UpdateArticle)
-		articleRoutes.GET("/table", controllersArticle.GetAllArticle)
-		articleRoutes.GET("/getOnlyArticleById/:id", controllersArticle.GetOnlyArticleByID)
-		articleRoutes.DELETE("/deleteArticle/:id", controllersArticle.DeleteArticle)
+		articleRoutes.GET("/search", controllers.GetSearchRelationArticleUser)
+		articleRoutes.GET("/view/:id", controllers.GetArticleById)
+		articleRoutes.POST("/addView/:id", controllers.IncrementArticleView)
+		articleRoutes.POST("/createArticle/:id", controllers.CreateArticle)
+		articleRoutes.PUT("/updateArticle/:id", controllers.UpdateArticle)
+		articleRoutes.GET("/table", controllers.GetAllArticle)
+		articleRoutes.GET("/getOnlyArticleById/:id", controllers.GetOnlyArticleByID)
+		articleRoutes.DELETE("/deleteArticle/:id", controllers.DeleteArticle)
 	}
 }
