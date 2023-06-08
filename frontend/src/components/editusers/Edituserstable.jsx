@@ -1,28 +1,21 @@
-import { useState, useEffect } from 'react';
-import { Box, Button, Typography, Modal, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow ,TablePagination } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { useState } from 'react';
+import {
+
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination
+} from '@mui/material';
+
 import useFetch from "../../hooks/useFetch";
 
 const Edituserstable = () => {
   const { data } = useFetch("users/");
-  console.log(data);
-  const [open, setOpen] = useState(false);
-  // const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [imageURLs, setImageURLs] = useState([]);
-  const [images, setImages] = useState('');
-
-  useEffect(() => {
-    if (images?.length < 1) return;
-    const newImageUrls = [];
-    images?.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
-    setImageURLs(newImageUrls);
-  }, [images]);
-
-  const onImageChange = (e) => {
-    setImages([...e.target.files]);
-  };
+  console.log("data",data);
 
   const columns = [
     {
@@ -38,11 +31,11 @@ const Edituserstable = () => {
       accessor: 'uemail',
     },
     {
-      name: 'username',
+      name: 'Username',
       accessor: 'username',
     },
-    
   ];
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
@@ -74,7 +67,7 @@ const Edituserstable = () => {
   };
 
   const sortData = (data, key, direction) => {
-    return data.sort((a, b) => {
+    return data.users.sort((a, b) => {
       if (a[key] < b[key]) {
         return direction === "asc" ? -1 : 1;
       }
@@ -85,8 +78,8 @@ const Edituserstable = () => {
     });
   };
 
-  const filteredData = data
-    ? data.filter(
+  const filteredData = data.users
+    ? data.users?.filter(
         (row) =>
           row.fname.toLowerCase().includes(searchTerm.toLowerCase()) ||
           row.lname.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -103,16 +96,9 @@ const Edituserstable = () => {
     page * rowsPerPage + rowsPerPage
   );
 
-  useEffect(() => {
-    if (images?.length < 1) return;
-    const newImageUrls = [];
-    images?.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
-    setImageURLs(newImageUrls);
-  }, [images]);
-
   return (
     <div className="container mx-auto my-5">
-        <TextField
+      <TextField
         label="Search"
         value={searchTerm}
         onChange={handleSearchChange}
@@ -121,38 +107,25 @@ const Edituserstable = () => {
         fullWidth
       />
       <TableContainer>
-
         <Table>
           <TableHead>
             <TableRow className="bg-gray-500">
               {columns.map((column) => (
-                <TableCell
-                  key={column.name}
-                  onClick={() => handleSort(column)}
-                >
+                <TableCell key={column.name} onClick={() => handleSort(column)}>
                   {column.name}
                   {sortConfig.key === column.accessor && (
-                    <span>
-                      {sortConfig.direction === "asc" ? " ▲" : " ▼"}
-                    </span>
+                    <span>{sortConfig.direction === "asc" ? " ▲" : " ▼"}</span>
                   )}
                 </TableCell>
               ))}
             </TableRow>
-       
           </TableHead>
           <TableBody>
             {paginatedData.map((row) => (
-              <TableRow className="bg-white" key={row.userid}>
+              <TableRow className="bg-white" key={row.ID}>
                 {columns.map((column) => (
                   <TableCell key={column.name}>{row[column.accessor]}</TableCell>
                 ))}
-                {/* <TableCell>
-                  <Button onClick={handleOpen} variant="text">
-                    Edit
-                  </Button>
-                  <Button variant="text">Delete</Button>
-                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>
@@ -168,53 +141,7 @@ const Edituserstable = () => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      {/* Edit content */}
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box className="p-5 bg-white w-1/2 inset-x-1/2 -translate-x-1/2 top-28 absolute ">
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Edit User
-          </Typography>
-          <div className="grid grid-cols-2 gap-5">
-            <div>
-              <IconButton color="primary" aria-label="upload picture" component="label">
-                <input hidden accept="image/*" type="file" onChange={onImageChange} />
-                <PhotoCamera />
-              </IconButton>
-              <label className=" text-blue-500">Upload Image</label>
-              {imageURLs.map((imageSrc, index) => (
-                <img key={index} height={100} src={imageSrc} alt="profileimg" />
-              ))}
-            </div>
-            <div></div>
-            <div>
-              <TextField label="Username" variant="standard" />
-            </div>
-            <div>
-              <TextField label="Password" variant="standard" />
-            </div>
-            <div>
-              <TextField label="Firstname" variant="standard" />
-            </div>
-            <div>
-              <TextField label="Lastname" variant="standard" />
-            </div>
-            <div>
-              <TextField label="Email" variant="standard" />
-            </div>
-          </div>
-          <div className="flex justify-end gap-5">
-            <Button onClick={handleClose} variant="contained">
-              Cancel
-            </Button>
-            <Button variant="contained">Apply</Button>
-          </div>
-        </Box>
-      </Modal>
+
     </div>
   );
 };

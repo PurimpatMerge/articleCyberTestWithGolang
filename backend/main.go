@@ -2,7 +2,7 @@ package main
 
 import (
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/initializers"
-	"CyberTestWithGolang/articleCyberTestWithGolang/backend/routesArticle"
+	"CyberTestWithGolang/articleCyberTestWithGolang/backend/routes"
 	"os"
 
 	// เป็นการimport ที่เรียกใช้ในการ print in console มา
@@ -21,7 +21,8 @@ func main() {
 	router.Use(initializers.CorsMiddleware())
 
 	// Set up article routes
-	routesArticle.SetupArticleRoutes(router.Group("/v1/api/article"))
+	routes.SetupArticleRoutes(router.Group("/v1/api/article"))
+	routes.SetupUserRoutes(router.Group("/v1/api/users"))
 
 	//basic starter before sperate the env
 	// router.GET("/v1/api/article/search", func(c *gin.Context) {
