@@ -20,14 +20,15 @@ const ShowArticle = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(4);
   const [totalCount, setTotalCount] = useState(0);
-
-
+  
+  
   const { data } = useFetch(
     `article/search?search=${searchQuery || ""}&page=${page || 1}&limit=${
       limit || 8
     }`
-  );
-
+    );
+    
+    console.log(data);
   useEffect(() => {
     if (data) {
       setTotalCount(data.countAllViews);
