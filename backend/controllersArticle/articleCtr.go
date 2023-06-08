@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/initializers"
+	"CyberTestWithGolang/articleCyberTestWithGolang/backend/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -93,43 +94,11 @@ func GetArticleById(c *gin.Context) {
 		return
 	}
 
-	relationData := make([]*map[string]interface{}, len(results))
-	for i, result := range results {
-		user := map[string]interface{}{
-			"fname":    result["fname"],
-			"lname":    result["lname"],
-			"username": result["username"],
-			"uemail":   result["uemail"],
-			"userId":   result["userId"],
-			"upicture": result["upicture"],
-			"updateAt": result["updateAt"],
-		}
-
-		userArticle := map[string]interface{}{
-			"id":        result["userArticleId"],
-			"userId":    result["userId"],
-			"articleId": result["articleId"],
-		}
-
-		article := map[string]interface{}{
-			"id":          result["articleId"],
-			"title":       result["title"],
-			"content":     result["content"],
-			"author":      result["author"],
-			"publishedAt": result["publishedAt"],
-			"updatedAt":   result["updatedAt"],
-			"category":    result["category"],
-			"tags":        result["tags"],
-			"image":       result["image"],
-			"viewsCount":  result["viewsCount"],
-			"likesCount":  result["likesCount"],
-		}
-
-		relationData[i] = &map[string]interface{}{
-			"user":        user,
-			"userArticle": userArticle,
-			"article":     article,
-		}
+	relationData, err := util.GetRelationData(results)
+	if err != nil {
+		// Handle the error when getting relation data
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
 	}
 
 	c.JSON(200, gin.H{"relationData": relationData})

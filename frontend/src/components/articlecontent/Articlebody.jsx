@@ -15,8 +15,8 @@ const Articlebody = () => {
 
   // Extract the necessary information from the data object
   const {
-    user: { fname, lname, updateAt } = {},
-    article: { title, content, author, publishedAt, category, tags, image, viewsCount, likesCount } = {},
+    User: { fname, lname, updateAt } = {},
+    Article: { title, content, author, publishedAt, category, tags, image, viewsCount, likesCount } = {},
   } = data.relationData[0] || {};
 
   // Format the Published At date
@@ -25,7 +25,7 @@ const Articlebody = () => {
     month: 'long',
     day: 'numeric',
   });
-
+console.log(data);
   return (
     <div className="container mx-auto my-10 bg-white p-5 flex">
       {/* Article */}
