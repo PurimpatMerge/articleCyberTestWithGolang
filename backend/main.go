@@ -2,7 +2,9 @@ package main
 
 import (
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/initializers"
-	"fmt" // เป็นการimport ที่เรียกใช้ในการ print in console มา
+	"CyberTestWithGolang/articleCyberTestWithGolang/backend/routes"
+
+	// เป็นการimport ที่เรียกใช้ในการ print in console มา
 
 	"github.com/gin-gonic/gin" //framework for dns api route path endpoint
 )
@@ -13,12 +15,20 @@ func init() {
 }
 
 func main() {
-	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		fmt.Println("working on main")
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+	router := gin.Default()
+
+	router.Use(initializers.CorsMiddleware())
+
+	// Set up article routes
+	routes.SetupArticleRoutes(router.Group("/v1/api/article"))
+
+	//basic starter before sperate the env
+	// router.GET("/v1/api/article/search", func(c *gin.Context) {
+	// 	fmt.Println("working on main")
+	// 	c.JSON(200, gin.H{
+	// 		"message": "pong",
+	// 	})
+	// })
+
+	router.Run() // listen and serve on 0.0.0.0:8080
 }
