@@ -132,7 +132,6 @@ func IncrementArticleView(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "Article view count incremented successfully."})
 }
 
-// create with out class no oop need fix
 func CreateArticle(c *gin.Context) {
 	userId := c.Param("id") // Extract the userId from the URL params
 
@@ -175,9 +174,23 @@ func CreateArticle(c *gin.Context) {
 		return
 	}
 
-	// Log the userId and article data
-	log.Printf("userId: %s, article: %+v", userId, article)
+	// Create user_articles entry
+	userArticle := models.UserArticle{
+		UserID:    userId,
+		ArticleID: article.ID,
+	}
+
+	err = initializers.DB.Create(&userArticle).Error
+	if err != nil {
+		// Handle the database error
+		log.Printf("Error creating user_article entry: %s", err.Error())
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	// Log the userId, article, and userArticle data
+	log.Printf("userId: %s, article: %+v, userArticle: %+v", userId, article, userArticle)
 
 	// Return the response
-	c.JSON(201, gin.H{"message": article})
+	c.JSON(201, gin.H{"message": "Article created successfully"})
 }
