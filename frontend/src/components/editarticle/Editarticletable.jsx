@@ -150,10 +150,10 @@ const Editarticletable = () => {
           </TableCell>
         ))}
         <TableCell>
-       <Link to={`/editarticlebody/${row.id}`}>   
+       <Link to={`/editarticlebody/${row.ID}`}>   
        <Button variant="text">Edit</Button> 
               </Link>
-          <Button variant="text"  onClick={() => handleDelete(row.id)} color="error">Delete</Button>
+          <Button variant="text"  onClick={() => handleDelete(row.ID)} color="error">Delete</Button>
         </TableCell>
       </TableRow>
     ))}

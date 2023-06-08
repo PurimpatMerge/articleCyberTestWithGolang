@@ -268,3 +268,22 @@ func UpdateArticle(c *gin.Context) {
 	result.First(&updatedArticle, articleID)
 	c.JSON(200, gin.H{"message": "Article updated successfully", "article": updatedArticle})
 }
+
+// Table get all aticle
+func GetAllArticle(c *gin.Context) {
+	query := `
+		SELECT *
+		FROM articles
+	`
+
+	var articles []models.Article
+	log.Print(articles)
+
+	result := initializers.DB.Raw(query).Scan(&articles)
+	if result.Error != nil {
+		// Handle the database query error with a 500 status code
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
+	}
+	c.JSON(200, gin.H{"results": articles})
+}
