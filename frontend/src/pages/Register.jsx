@@ -32,34 +32,35 @@ const Register = () => {
 
       const handleSubmit = async () => {
         try {
-          let list = [];
+          // let list = [];
       
-          if (images.length > 0) {
-            list = await Promise.all(
-              images.map(async (file) => {
-                const data = new FormData();
-                data.append("file", file);
-                data.append("upload_preset", "upload");
+          // if (images.length > 0) {
+          //   list = await Promise.all(
+          //     images.map(async (file) => {
+          //       const data = new FormData();
+          //       data.append("file", file);
+          //       data.append("upload_preset", "upload");
       
-                const uploadRes = await axios.post(
-                  "https://api.cloudinary.com/v1_1/dwwfqdl79/image/upload",
-                  data
-                );
+          //       const uploadRes = await axios.post(
+          //         "https://api.cloudinary.com/v1_1/dwwfqdl79/image/upload",
+          //         data
+          //       );
       
-                const { url } = uploadRes.data;
-                return url;
-              })
-            );
-          } else {
-            // Set a default image URL if no image is selected
-            list = ["https://contenthub-static.grammarly.com/blog/wp-content/uploads/2022/08/BMD-3398.png"];
-          }
+          //       const { url } = uploadRes.data;
+          //       return url;
+          //     })
+          //   );
+          // } else {
+          //   // Set a default image URL if no image is selected
+          //   list = ["https://contenthub-static.grammarly.com/blog/wp-content/uploads/2022/08/BMD-3398.png"];
+          // }
       
           const allInfo = {
             ...info,
-            upicture: list,
+            upicture: ["https://contenthub-static.grammarly.com/blog/wp-content/uploads/2022/08/BMD-3398.png"],
           };
       // add the get data validation
+      console.log(allInfo);
           axios.post('http://localhost:8000/v1/api/users/register', allInfo)
           .then(response => {
             // Registration successful
@@ -79,7 +80,7 @@ const Register = () => {
             }
           });
 
-          navigate('/');
+          // navigate('/');
         } catch (err) {
           console.log("You're not logged in.");
         }

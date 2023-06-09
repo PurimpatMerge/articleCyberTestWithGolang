@@ -5,9 +5,11 @@ import (
 	"regexp"
 	"strings"
 	"unicode"
+
+	"github.com/gin-gonic/gin"
 )
 
-type FormValidation struct {
+type FormData struct {
 	FName     string   `json:"fname"`
 	LName     string   `json:"lname"`
 	Username  string   `json:"username"`
@@ -16,8 +18,18 @@ type FormValidation struct {
 	UPicture  []string `json:"upicture"`
 }
 
-func (formData *FormValidation) Validate() []string {
-	var validationErrors []string
+func Validate(c *gin.Context) {
+	var formData FormData
+
+	// Bind the JSON data from the request body to the formData struct
+	if err := c.ShouldBindJSON(&formData); err != nil {
+		c.JSON(400, gin.H{"error": "Invalid request payload"})
+		c.Abort()
+		return
+	}
+
+	// Validate the request body
+	validationErrors := []string{}
 
 	if len(formData.Username) < 5 {
 		validationErrors = append(validationErrors, "Username should be at least 5 characters long")
@@ -37,7 +49,16 @@ func (formData *FormValidation) Validate() []string {
 
 	LogValidationErrors(validationErrors)
 
-	return validationErrors
+	if len(validationErrors) > 0 {
+		c.JSON(400, gin.H{"errors": validationErrors})
+		c.Abort()
+		return
+	}
+
+	// Store the formData in the context for access in the controller
+	c.Set("formData", formData)
+
+	c.Next()
 }
 
 func containsCapitalLetter(password string) bool {

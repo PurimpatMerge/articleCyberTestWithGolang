@@ -4,6 +4,8 @@ import (
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/initializers"
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/models"
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/util"
+	"log"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -24,31 +26,34 @@ func GetAllUser(c *gin.Context) {
 }
 
 func RegisterUser(c *gin.Context) {
+	log.Println("Request Body:")
 
-	// Get the request body parameters
-	var requestBody util.FormValidation
-
-	// make it into json
-	if err := c.ShouldBindJSON(&requestBody); err != nil {
+	// Get the formData from the context
+	formData, exists := c.Get("formData")
+	if !exists {
 		c.JSON(400, gin.H{"error": "Invalid request payload"})
 		return
 	}
-	// log.Println("Request Body:", requestBody) use for log data
-	validationErrors := requestBody.Validate()
 
-	if len(validationErrors) > 0 {
-		c.JSON(400, gin.H{"errors": validationErrors})
+	// Type assertion to convert formData to util.FormData
+	requestBody, ok := formData.(util.FormData)
+	if !ok {
+		c.JSON(400, gin.H{"error": "Invalid request payload"})
 		return
 	}
 
+	log.Println("requestBody:", requestBody)
+	log.Println("2")
+
 	// Check if email already exists
 	var existingUser models.User
-	if err := initializers.DB.Where("uemail = ?", requestBody.UEmail).First(&existingUser.UEmail).Error; err == nil {
+	if err := initializers.DB.Where("uemail = ?", requestBody.UEmail).First(&existingUser).Error; err == nil {
 		// Email already exists
 		c.JSON(409, gin.H{"error": "This Email already exists."})
 		return
 	}
 
+	log.Println("3")
 	// Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(requestBody.UPassword), bcrypt.DefaultCost)
 	if err != nil {
@@ -56,6 +61,7 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
+	log.Println("4")
 	// Create a new user instance
 	newUser := models.NewUser(
 		requestBody.FName,
@@ -63,9 +69,12 @@ func RegisterUser(c *gin.Context) {
 		requestBody.Username,
 		requestBody.UEmail,
 		string(hashedPassword),
-		requestBody.UPicture[0], // Take the first image URL from the array
+		requestBody.UPicture[0],
 	)
+	newUser.CreatedAt = time.Now()
+	newUser.UpdatedAt = time.Now()
 
+	log.Println("5")
 	// Save the new user to the database
 	if err := initializers.DB.Create(&newUser).Error; err != nil {
 		c.JSON(500, gin.H{"error": "Failed to create user"})
