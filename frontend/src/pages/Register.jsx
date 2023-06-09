@@ -80,7 +80,7 @@ const Register = () => {
             }
           });
 
-          // navigate('/');
+          navigate('/');
         } catch (err) {
           console.log("You're not logged in.");
         }
