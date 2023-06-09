@@ -3,6 +3,7 @@ package controllers
 import (
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/initializers"
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/models"
+	"CyberTestWithGolang/articleCyberTestWithGolang/backend/util"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -23,18 +24,20 @@ func GetAllUser(c *gin.Context) {
 }
 
 func RegisterUser(c *gin.Context) {
-	// Get the request body parameters
-	var requestBody struct {
-		FName     string   `json:"fname"`
-		LName     string   `json:"lname"`
-		Username  string   `json:"username"`
-		UEmail    string   `json:"uemail"`
-		UPassword string   `json:"upassword"`
-		UPicture  []string `json:"upicture"`
-	}
 
+	// Get the request body parameters
+	var requestBody util.FormValidation
+
+	// make it into json
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
 		c.JSON(400, gin.H{"error": "Invalid request payload"})
+		return
+	}
+	// log.Println("Request Body:", requestBody) use for log data
+	validationErrors := requestBody.Validate()
+
+	if len(validationErrors) > 0 {
+		c.JSON(400, gin.H{"errors": validationErrors})
 		return
 	}
 
