@@ -23,6 +23,7 @@ func main() {
 	// Set up article routes
 	routes.SetupArticleRoutes(router.Group("/v1/api/article"))
 	routes.SetupUserRoutes(router.Group("/v1/api/users"))
+	routes.SetupAuthRoutes(router.Group("/v1/api/auth"))
 
 	//basic starter before sperate the env
 	// router.GET("/v1/api/article/search", func(c *gin.Context) {

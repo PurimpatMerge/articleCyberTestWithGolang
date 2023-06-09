@@ -6,10 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupUserRoutes(router *gin.RouterGroup) {
-	userRoutes := router
+func SetupAuthRoutes(router *gin.RouterGroup) {
+	authRoutes := router
 	{
-		userRoutes.GET("/", controllers.GetAllUser)
-		userRoutes.POST("/register", controllers.RegisterUser)
+		authRoutes.POST("/login", controllers.Login)
 	}
 }

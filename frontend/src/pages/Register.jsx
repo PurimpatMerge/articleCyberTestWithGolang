@@ -60,7 +60,6 @@ const Register = () => {
             upicture: list,
           };
       
-
           await axios.post(
             `http://localhost:8000/v1/api/users/register`,
             allInfo,

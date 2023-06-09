@@ -142,7 +142,7 @@ func CreateArticle(c *gin.Context) {
 		Author   string   `json:"author"`
 		Category string   `json:"category"`
 		Tags     []string `json:"tags"`
-		Image    string   `json:"image"`
+		Image    []string `json:"image"`
 	}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -153,19 +153,13 @@ func CreateArticle(c *gin.Context) {
 
 	now := time.Now() // Current timestamp
 
-	article := models.Article{
-		Title:       body.Title,
-		Content:     body.Content,
-		Author:      body.Author,
-		Category:    body.Category,
-		Tags:        strings.Join(body.Tags, ", "),
-		Image:       body.Image,
-		ViewsCount:  "0",
-		LikesCount:  "0",
-		CreatedAt:   now,
-		UpdatedAt:   now,
-		PublishedAt: now,
-	}
+	article := models.NewArticle(body.Title, body.Content, body.Author)
+	article.Category = body.Category
+	article.Tags = strings.Join(body.Tags, ", ")
+	article.Image = body.Image[0]
+	article.CreatedAt = now
+	article.UpdatedAt = now
+	article.PublishedAt = now
 
 	err := initializers.DB.Create(&article).Error
 	if err != nil {

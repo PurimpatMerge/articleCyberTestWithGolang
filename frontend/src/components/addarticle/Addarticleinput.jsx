@@ -62,7 +62,7 @@ const Addarticleinput = () => {
       const userid = localStorage.getItem("userid");
   
       const accessToken = localStorage.getItem("accessToken");
-  
+  console.log(allInfo);
       await axios.post(
         `http://localhost:8000/v1/api/article/createArticle/${userid}`,
         allInfo,
