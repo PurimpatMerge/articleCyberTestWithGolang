@@ -26,7 +26,7 @@ func GetAllUser(c *gin.Context) {
 }
 
 func RegisterUser(c *gin.Context) {
-	log.Println("Request Body:")
+	// log.Println("Request Body:")
 
 	// Get the formData from the context
 	formData, exists := c.Get("formData")
@@ -36,7 +36,7 @@ func RegisterUser(c *gin.Context) {
 	}
 
 	// Type assertion to convert formData to util.FormData
-	requestBody, ok := formData.(util.FormData)
+	requestBody, ok := formData.(util.FormDataUser)
 	if !ok {
 		c.JSON(400, gin.H{"error": "Invalid request payload"})
 		return

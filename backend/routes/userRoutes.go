@@ -11,6 +11,6 @@ func SetupUserRoutes(router *gin.RouterGroup) {
 	userRoutes := router
 	{
 		userRoutes.GET("/", controllers.GetAllUser)
-		userRoutes.POST("/register", util.Validate, controllers.RegisterUser)
+		userRoutes.POST("/register", util.ValidateUser, controllers.RegisterUser)
 	}
 }

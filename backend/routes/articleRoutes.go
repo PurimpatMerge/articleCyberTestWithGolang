@@ -13,7 +13,7 @@ func SetupArticleRoutes(router *gin.RouterGroup) {
 		articleRoutes.GET("/search", controllers.GetSearchRelationArticleUser)
 		articleRoutes.GET("/view/:id", controllers.GetArticleById)
 		articleRoutes.POST("/addView/:id", controllers.IncrementArticleView)
-		articleRoutes.POST("/createArticle/:id", util.VerifyToken(), controllers.CreateArticle)
+		articleRoutes.POST("/createArticle/:id", util.VerifyToken(), util.ValidateArticle, controllers.CreateArticle)
 		articleRoutes.PUT("/updateArticle/:id", controllers.UpdateArticle)
 		articleRoutes.GET("/table", controllers.GetAllArticle)
 		articleRoutes.GET("/getOnlyArticleById/:id", controllers.GetOnlyArticleByID)

@@ -135,21 +135,21 @@ func IncrementArticleView(c *gin.Context) {
 // create (relation)
 func CreateArticle(c *gin.Context) {
 	userId := c.Param("id") // Extract the userId from the URL params
-
-	var body struct {
-		Title    string   `json:"title"`
-		Content  string   `json:"content"`
-		Author   string   `json:"author"`
-		Category string   `json:"category"`
-		Tags     []string `json:"tags"`
-		Image    []string `json:"image"`
-	}
-
-	if err := c.ShouldBindJSON(&body); err != nil {
-		// Handle the error if the JSON binding fails
+	log.Println("1")
+	formData, exists := c.Get("formData")
+	if !exists {
 		c.JSON(400, gin.H{"error": "Invalid request payload"})
 		return
 	}
+	log.Println("2")
+
+	// Type assertion to convert formData to util.FormDataUser
+	body, ok := formData.(util.FormDataArticle)
+	if !ok {
+		c.JSON(400, gin.H{"error": "Invalid request payload"})
+		return
+	}
+	log.Println("requestBody:", body)
 
 	now := time.Now() // Current timestamp
 
