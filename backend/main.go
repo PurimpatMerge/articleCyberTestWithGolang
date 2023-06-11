@@ -5,14 +5,12 @@ import (
 	"CyberTestWithGolang/articleCyberTestWithGolang/backend/routes"
 	"os"
 
-	// เป็นการimport ที่เรียกใช้ในการ print in console มา
-
-	"github.com/gin-gonic/gin" //framework for dns api route path endpoint
+	"github.com/gin-gonic/gin" //framework for dns api route path endpoint res req json
 )
 
 func init() {
 	initializers.LoadEnv()   // load env port 8000
-	initializers.ConnectDB() // load env port 8000
+	initializers.ConnectDB() // load connect to DB
 }
 
 func main() {
