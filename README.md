@@ -116,3 +116,27 @@ password  : 1234Ss
 
 อธิบายสิ่งที่ทำ จากที่เป็นใน code นั้นผมได้มีการ เปลี่ยนจาก js มา เป็น go แต่ ทุกอย่างสามารถใช้งานได้เหมือนเดิมใน frontend รวมไปถึง jwt verfiy ,validation และ การ res
 
+
+
+
+////////// start from 0
+ติดตั้งตัว go dev download
+dir ของเรา code จะอยู่ใน dir ของ path user/go/
+
+1.สร้าง folder backend open git bash terminal : go mod init golang-crud-gin 
+2.ติดตั้งตัว save compile เหมือนกับตัว nodemon แต่เป็นของ Go : go get github.com/githubnemo/CompileDaemon // มันจะมาอยู่ใน  File go.mod เป็นเหมือนตัว package json
+3.ทำการinstall ตัว  go.mod: go install github.com/githubnemo/CompileDaemon // เหมือนๆกับ npm install
+4.ติดตั้ง ตัว godotenv  เพื่อให้งานต่อ การใช้งานง่ายขึ้นของ ตัว variable :go get github.com/joho/godotenv
+5.ติดตั้ง $ go get -u github.com/gin-gonic/gin // framwork ของ gin
+6.ติดตั้งตัวของ gorm เป็นlibary สำหรับ golang :go get -u gorm.io/gorm
+7.ติดตั้ง: go get -u gorm.io/driver/mysql //สำหรับ mySql 
+
+////////////////////////
+สร้าง file main.go
+
+วิธี run แบบ nodemon go :  CompileDaemon -command="./backend" //ถ้าหาไม่เจอ ไปแก้ moduleให้ตรงกับ dir เช่นของผม CyberTestWithGolang/articleCyberTestWithGolang/backend
+
+
+
+
+
